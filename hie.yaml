@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:prim-char"
+
+dependencies:
+  - default.nix
+  - prim-char.cabal
+  - shell.nix
+  - .hlint.yaml
