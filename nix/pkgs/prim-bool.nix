@@ -3,11 +3,11 @@
 }:
 mkDerivation {
   pname = "prim-bool";
-  version = "1.0.1";
+  version = "1.0.0";
   src = fetchgit {
     url = "https://github.com/riz0id/prim-bool";
-    sha256 = "0ww181n143p829xb99mbi7wnjd1d5rps7z4r3av78g1khma4164i";
-    rev = "c293526c20420d3e428179d3da176dc5b1ad8904";
+    sha256 = "0c02ciibgf11y2q4syr21mbvcwj3026672lx9l06z6rz11kx77ac";
+    rev = "40fa894b4082a52c9653c1e12739b0bfdbb12471";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -20,4 +20,5 @@ mkDerivation {
   homepage = "https://github.com/riz0id/prim-bool";
   description = "Unboxed booleans";
   license = lib.licenses.isc;
+  mainProgram = "example";
 }

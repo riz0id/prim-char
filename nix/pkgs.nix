@@ -1,22 +1,12 @@
-{ ghc ? "ghc922" }:
+args:
 
-let
-  nixpkgs = import ./nixpkgs.nix { };
-
-  overlay = self: super: {
-    haskell = super.haskell // {
-      packages = super.haskell.packages // {
-        "${ghc}" = super.haskell.packages."${ghc}".override (_: {
-          overrides = (new: _: {
-            prim-bool   = new.callPackage pkgs/prim-bool.nix { };
-            prim-compat = new.callPackage pkgs/prim-compat.nix { };
-            prim-char   = new.callCabal2nix "prim-char" ../. { };
-            prim-int    = new.callPackage pkgs/prim-int.nix { };
-          });
-        });
-      };
-    };
-  };
-in import nixpkgs {
-  overlays = [ overlay ];
+import (import ./nixpkgs.nix) {
+  config.packageOverrides = pkgs: 
+    pkgs.lib.composeManyExtensions (map (f: f args) [  
+      (import exts/prim-bool.nix)
+      (import exts/prim-char.nix)
+      (import exts/prim-compat.nix)
+      (import exts/prim-int.nix)
+      (import exts/tasty-hedgehog.nix)
+    ]) pkgs pkgs;
 }
