@@ -16,7 +16,7 @@
 --
 -- @since 1.0.0
 module Data.Unicode.Prim
-  ( -- * GeneralCategory# 
+  ( -- * GeneralCategory#
     GeneralCategory#
       ( UppercaseLetter#,
         LowercaseLetter#,
@@ -51,7 +51,7 @@ module Data.Unicode.Prim
       ),
     generalCategory#,
 
-    -- * Conversion 
+    -- * Conversion
     fromGeneralCategory,
     toGeneralCategory,
     fromInt#,
@@ -65,12 +65,12 @@ import Data.Int.Prim (Int#)
 import Data.Int.Prim qualified as Int
 import Data.Coerce (coerce)
 import GHC.Exts (Char#)
-import Data.Char (GeneralCategory)
+import Data.Char (GeneralCategory (..))
 import qualified GHC.Base as GHC
 
 -- GeneralCategory# ------------------------------------------------------------
 
--- | 'GeneralCategory#' is an unboxed enumeration of the Unicode general 
+-- | 'GeneralCategory#' is an unboxed enumeration of the Unicode general
 -- categories.
 --
 -- @since 1.0.0
@@ -250,7 +250,7 @@ pattern Surrogate# = GeneralCategory# 27#
 pattern PrivateUse# :: GeneralCategory#
 pattern PrivateUse# = GeneralCategory# 28#
 
--- | The unboxed analog to the 'Data.Char.NotAssigned' constructor. 
+-- | The unboxed analog to the 'Data.Char.NotAssigned' constructor.
 --
 -- @'toGeneralCategory' 'NotAssigned#' == 'Data.Char.NotAssigned'@
 pattern NotAssigned# :: GeneralCategory#
@@ -303,32 +303,32 @@ foreign import ccall unsafe "u_gencat"
 
 -- Conversion ------------------------------------------------------------------
 
--- | Convert a boxed 'GeneralCategory' enum to an unboxed 'GeneralCategory#' 
--- value. 
+-- | Convert a boxed 'GeneralCategory' enum to an unboxed 'GeneralCategory#'
+-- value.
 fromGeneralCategory :: GeneralCategory -> GeneralCategory#
 fromGeneralCategory x = GeneralCategory# (GHC.dataToTag# x)
 
--- | Convert an unboxed 'GeneralCategory#' enum to a boxed 'GeneralCategory' 
--- value. 
+-- | Convert an unboxed 'GeneralCategory#' enum to a boxed 'GeneralCategory'
+-- value.
 --
 -- @since 1.0.0
 toGeneralCategory :: GeneralCategory# -> GeneralCategory
-toGeneralCategory (GeneralCategory# x#) = GHC.tagToEnum# x# 
+toGeneralCategory (GeneralCategory# x#) = GHC.tagToEnum# x#
 
 -- | Convert an 'Int#' value to the corresponding 'GeneralCategory#' enum if
 -- the 'Int#' is between 0# and 29# (inclusive).
 --
--- All 'Int#' values outside of the range @[0#, 29#]@ are will return the 
+-- All 'Int#' values outside of the range @[0#, 29#]@ are will return the
 -- 'NotAssigned#' enum.
 --
 -- @since 1.0.0
 fromInt# :: Int# -> GeneralCategory#
-fromInt# x# = 
-  case Bool.and# (Int.geInt# 0# x#) (Int.leInt# x# 29#) of 
+fromInt# x# =
+  case Bool.and# (Int.geInt# 0# x#) (Int.leInt# x# 29#) of
     True# -> GeneralCategory# x#
     False# -> NotAssigned#
 
--- | Convert a 'GeneralCategory#' enum to an 'Int#' value. 
+-- | Convert a 'GeneralCategory#' enum to an 'Int#' value.
 --
 -- @since 1.0.0
 toInt# :: GeneralCategory# -> Int#

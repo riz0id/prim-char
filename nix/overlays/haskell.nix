@@ -5,9 +5,9 @@ final: prev:
 let
   hsLib = final.haskell.lib.compose;
 
-  ghcVersions = ["981"];
+  ghcVersions = ["9101"];
 
-  defaultGHCVersion = "981";
+  defaultGHCVersion = "9101";
 
   localHsPackages = {
     # Libraries
@@ -25,7 +25,7 @@ let
 
   haskell = prev.haskell // {
     packages = prev.haskell.packages // {
-      ghc981 = prev.haskell.packages.ghc981.override {
+      ghc9101 = prev.haskell.packages.ghc9101.override {
         overrides = hfinal: hprev: (final.lib.mapAttrs (mkLocalDerivation hfinal) localHsPackages) // {
           prim-bool = hfinal.callPackage ../haskell-packages/prim-bool.nix {};
           prim-compat = hfinal.callPackage ../haskell-packages/prim-compat.nix {};
@@ -39,7 +39,7 @@ let
     let hsPkgs = haskell.packages."ghc${ghcVersion}";
 
         haskell-language-server = prev.haskell-language-server.override {
-          supportedGhcVersions = [ ghcVersion ];
+          supportedGhcVersions = [ "${ghcVersion}" ];
         };
 
         shell = hsPkgs.shellFor {
@@ -47,18 +47,16 @@ let
 
           doBenchmark = true;
 
-          packages = pkgs: map (name: pkgs.${name}) (builtins.attrNames localHsPackages);
+          packages = pkgs: [
+            pkgs.prim-char
+          ];
 
           buildInputs = [
             final.cabal-install
-            final.cabal2nix
             hsPkgs.ghc
             haskell-language-server
             final.hlint
-            final.stack
-            final.newman
-          ] ++ final.lib.optionals (ghcVersion == defaultGHCVersion) [
-            haskell.packages."ghc${defaultGHCVersion}".stylish-haskell
+            final.stylish-haskell
           ];
 
           src = null;
